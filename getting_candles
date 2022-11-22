@@ -1,0 +1,46 @@
+from iqoptionapi.stable_api import IQ_Option
+import time
+
+
+def Get_candles(market='EURUSD', Ks=1, num=1000, timeframe=60, from_to_past=time.time()):
+    # market = Symbol,
+    # Ks = how many chunks to get?
+    # num = number of candles in a chunk (>=1000)
+    # from_to_past = timestamp (get data from this time up until now)
+    
+    Iq = IQ_Option("robo.opti@gmail.com", "asdf1234!@#$asdf")
+    Iq.connect()
+
+    end_from_time = time.time()
+    l = []
+
+    for i in range(Ks):
+        data = Iq.get_candles(market, timeframe, num, from_to_past)  # 1654278346
+        l.append(data)
+        from_to_past = int(data[0]["from"]) - 1
+        
+    L = []
+    for j in range(-1, -len(l) - 1, -1):
+        L = L + l[j]
+    return L
+
+
+class Candle(int):
+    def __new__(cls, index, data):
+        if index < len(data) and data[index]:
+            return super().__new__(cls, index)
+
+    def __init__(self, index, data):
+        int.__init__(index)
+        self.data = data
+        self.min = data[index]['min']
+        self.max = data[index]['max']
+        self.open = data[index]['open']
+        # self.vol = self.data[index]['volume']
+        self.close = data[index]['close']
+        self.profit = self.close - self.open
+        self.green = self.profit > 0
+
+    @property
+    def vol(self):
+        return self.data[self]['volume']
