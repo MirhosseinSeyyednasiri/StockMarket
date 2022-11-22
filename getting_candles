@@ -38,4 +38,3 @@ class Candle(int):
         self.open = data[index]['open']
         self.vol = self.data[index]['volume']
         self.close = data[index]['close']
-        self.green = self.profit > 0
