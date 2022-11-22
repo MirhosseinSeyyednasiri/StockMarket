@@ -36,11 +36,6 @@ class Candle(int):
         self.min = data[index]['min']
         self.max = data[index]['max']
         self.open = data[index]['open']
-        # self.vol = self.data[index]['volume']
+        self.vol = self.data[index]['volume']
         self.close = data[index]['close']
-        self.profit = self.close - self.open
         self.green = self.profit > 0
-
-    @property
-    def vol(self):
-        return self.data[self]['volume']
